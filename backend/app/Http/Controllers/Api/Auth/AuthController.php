@@ -24,6 +24,7 @@ class AuthController extends Controller
 
     public function sendOtp(SendOtpRequest $request): JsonResponse
     {
+        \Illuminate\Support\Facades\Log::info("OTP Request received for: " . $request->string('recruiter_email'));
         $otpData = $this->otpService->generate(
             $request->string('recruiter_email')->toString()
         );
