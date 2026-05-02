@@ -99,6 +99,23 @@ export default function RecruiterTopbar() {
             href={routes.recruiter.newJnf}
             variant="contained"
             sx={{
+              bgcolor: "#006466",
+              "&:hover": { bgcolor: "#004b4d" },
+              fontSize: "0.95rem",
+              fontWeight: 600,
+              px: { xs: 2, md: 3 },
+              py: 1,
+              borderRadius: "8px",
+            }}
+          >
+            + New INF
+          </Button>
+
+          <Button
+            component={Link}
+            href={routes.recruiter.newJnf}
+            variant="contained"
+            sx={{
               bgcolor: "#1B3B6F",
               "&:hover": { bgcolor: "#122a52" },
               fontSize: "0.95rem",

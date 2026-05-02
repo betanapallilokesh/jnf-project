@@ -2,11 +2,107 @@ import MenuItem from "@mui/material/MenuItem";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import Autocomplete, { createFilterOptions } from "@mui/material/Autocomplete";
+import Chip from "@mui/material/Chip";
+import CodeIcon from "@mui/icons-material/Code";
+import CircularProgress from "@mui/material/CircularProgress";
+import { useEffect, useState } from "react";
+import {
+  SiReact,
+  SiNodedotjs,
+  SiPython,
+  SiCplusplus,
+  SiJavascript,
+  SiHtml5,
+  SiCss3,
+  SiMysql,
+  SiJava,
+  SiTypescript,
+  SiGo,
+  SiRust,
+  SiRuby,
+  SiPhp,
+  SiSwift,
+  SiKotlin,
+  SiDart,
+  SiTensorflow,
+  SiPytorch,
+  SiKeras,
+  SiScikitlearn,
+  SiPandas,
+  SiOpencv,
+  SiNextdotjs,
+  SiVuedotjs,
+  SiAngular,
+  SiSvelte,
+  SiDjango,
+  SiFlask,
+  SiSpringboot,
+  SiLaravel,
+  SiExpress,
+  SiFlutter,
+  SiMongodb,
+  SiPostgresql,
+  SiDocker,
+  SiKubernetes,
+  SiGit,
+  SiLinux,
+  SiTailwindcss
+} from "react-icons/si";
 import SectionCard from "@/components/ui/section-card";
 import type { JnfFieldErrors } from "../lib/jnf-validation";
 import type { JnfRecord } from "../types";
 import JnfFormGrid from "./jnf-form-grid";
 import { jnfFunctionalAreaOptions } from "../data/jnf-functional-areas";
+import { getSkillsCatalog } from "../lib/jnf-api";
+
+const filter = createFilterOptions<string>();
+
+const getSkillIcon = (name: string) => {
+  const lower = name.toLowerCase();
+  if (lower.includes("react")) return <SiReact />;
+  if (lower.includes("node")) return <SiNodedotjs />;
+  if (lower.includes("python")) return <SiPython />;
+  if (lower.includes("c++")) return <SiCplusplus />;
+  if (lower.includes("javascript") || lower === "js") return <SiJavascript />;
+  if (lower.includes("typescript") || lower === "ts") return <SiTypescript />;
+  if (lower.includes("html")) return <SiHtml5 />;
+  if (lower.includes("css")) return <SiCss3 />;
+  if (lower.includes("tailwind")) return <SiTailwindcss />;
+  if (lower.includes("sql")) return <SiMysql />;
+  if (lower.includes("postgres")) return <SiPostgresql />;
+  if (lower.includes("mongo")) return <SiMongodb />;
+  if (lower.includes("java") && !lower.includes("javascript")) return <SiJava />;
+  if (lower === "go" || lower === "golang") return <SiGo />;
+  if (lower.includes("rust")) return <SiRust />;
+  if (lower.includes("ruby")) return <SiRuby />;
+  if (lower.includes("php")) return <SiPhp />;
+  if (lower.includes("swift")) return <SiSwift />;
+  if (lower.includes("kotlin")) return <SiKotlin />;
+  if (lower.includes("dart")) return <SiDart />;
+  if (lower.includes("tensorflow") || lower === "tf") return <SiTensorflow />;
+  if (lower.includes("pytorch")) return <SiPytorch />;
+  if (lower.includes("keras")) return <SiKeras />;
+  if (lower.includes("scikit")) return <SiScikitlearn />;
+  if (lower.includes("pandas")) return <SiPandas />;
+  if (lower.includes("opencv")) return <SiOpencv />;
+  if (lower.includes("next")) return <SiNextdotjs />;
+  if (lower.includes("vue")) return <SiVuedotjs />;
+  if (lower.includes("angular")) return <SiAngular />;
+  if (lower.includes("svelte")) return <SiSvelte />;
+  if (lower.includes("django")) return <SiDjango />;
+  if (lower.includes("flask")) return <SiFlask />;
+  if (lower.includes("spring")) return <SiSpringboot />;
+  if (lower.includes("laravel")) return <SiLaravel />;
+  if (lower.includes("express")) return <SiExpress />;
+  if (lower.includes("flutter")) return <SiFlutter />;
+  if (lower.includes("docker")) return <SiDocker />;
+  if (lower.includes("kubernetes") || lower === "k8s") return <SiKubernetes />;
+  if (lower.includes("git")) return <SiGit />;
+  if (lower.includes("linux")) return <SiLinux />;
+
+  return <CodeIcon />;
+};
 
 type JnfJobProfileSectionProps = Readonly<{
   form: JnfRecord;
@@ -35,6 +131,24 @@ export default function JnfJobProfileSection({
   fieldErrors,
   embedded = false,
 }: JnfJobProfileSectionProps) {
+  const [skillOptions, setSkillOptions] = useState<string[]>([]);
+  const [loadingSkills, setLoadingSkills] = useState(true);
+  const [skillInputValue, setSkillInputValue] = useState("");
+
+  useEffect(() => {
+    async function fetchSkills() {
+      try {
+        const response = await getSkillsCatalog();
+        setSkillOptions(response.data.skills.map((s) => s.label));
+      } catch (error) {
+        console.error("Failed to fetch skills catalog", error);
+      } finally {
+        setLoadingSkills(false);
+      }
+    }
+    fetchSkills();
+  }, []);
+
   const content = (
     <Stack spacing={2.5}>
       <JnfFormGrid>
@@ -216,21 +330,74 @@ export default function JnfJobProfileSection({
           fullWidth
         />
 
-        <TextField
-          label="Required Skills"
-          placeholder="React, Node.js, SQL"
-          value={form.required_skills.join(", ")}
-          onChange={(event) =>
+        <Autocomplete
+          multiple
+          freeSolo
+          options={skillOptions}
+          loading={loadingSkills}
+          filterOptions={(options, params) => {
+            if (params.inputValue.trim() === '') {
+              return [];
+            }
+            return filter(options, params);
+          }}
+          value={form.required_skills}
+          inputValue={skillInputValue}
+          onInputChange={(event, newInputValue, reason) => {
+            if (reason === "input" && newInputValue.endsWith(",")) {
+              const val = newInputValue.slice(0, -1).trim();
+              if (val && !form.required_skills.includes(val)) {
+                setForm((current) => ({
+                  ...current,
+                  required_skills: [...current.required_skills, val],
+                }));
+              }
+              setSkillInputValue("");
+            } else if (reason !== "reset") {
+              setSkillInputValue(newInputValue);
+            } else {
+              setSkillInputValue("");
+            }
+          }}
+          onChange={(event, newValue) => {
             setForm((current) => ({
               ...current,
-              required_skills: event.target.value
-                .split(",")
-                .map((item) => item.trim())
-                .filter(Boolean),
-            }))
+              required_skills: newValue as string[],
+            }));
+            setSkillInputValue("");
+          }}
+          renderTags={(value: readonly string[], getTagProps) =>
+            value.map((option: string, index: number) => {
+              const { key, ...tagProps } = getTagProps({ index });
+              return (
+                <Chip
+                  key={key}
+                  {...tagProps}
+                  label={option}
+                  icon={getSkillIcon(option)}
+                  sx={{ pl: 0.5 }}
+                />
+              );
+            })
           }
-          helperText="Enter comma-separated skills."
-          fullWidth
+          renderInput={(params) => (
+            <TextField
+              {...params}
+              label="Required Skills"
+              placeholder=""
+              helperText="Type a skill and press Enter."
+              fullWidth
+              InputProps={{
+                ...params.InputProps,
+                endAdornment: (
+                  <>
+                    {loadingSkills ? <CircularProgress color="inherit" size={20} /> : null}
+                    {params.InputProps.endAdornment}
+                  </>
+                ),
+              }}
+            />
+          )}
         />
       </JnfFormGrid>
 

@@ -15,7 +15,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import AdminRecruiterDetailsModal from "./admin-recruiter-details-modal";
-import { listAdminRecruiters, type AdminRecruiterOverview } from "../lib/admin-api";
+import { listAdminRecruiters, deleteAdminRecruiter, type AdminRecruiterOverview } from "../lib/admin-api";
 import LoadingState from "@/components/ui/loading-state";
 
 export default function AdminRecruitersTable() {
@@ -56,10 +56,21 @@ export default function AdminRecruitersTable() {
     handleMenuClose();
   };
 
-  const handleToggleBlock = (recruiter: AdminRecruiterOverview) => {
-    // TODO: Implement real block/unblock API call
-    console.log("Toggle block for recruiter:", recruiter.id);
-    handleMenuClose();
+  const handleDelete = async (recruiter: AdminRecruiterOverview) => {
+    if (!confirm(`Are you sure you want to completely delete ${recruiter.fullName}? This action cannot be undone and will delete all JNFs created by this recruiter.`)) {
+      handleMenuClose();
+      return;
+    }
+    
+    try {
+      await deleteAdminRecruiter(recruiter.id);
+      setRecruiters((current) => current.filter((r) => r.id !== recruiter.id));
+    } catch (error) {
+      console.error("Failed to delete recruiter:", error);
+      alert("Failed to delete recruiter. Please try again.");
+    } finally {
+      handleMenuClose();
+    }
   };
 
   const getStatusColor = (status: string) => {
@@ -146,8 +157,8 @@ export default function AdminRecruitersTable() {
         <MenuItem onClick={() => menuRecruiter && handleViewDetails(menuRecruiter)}>
           👁️ View Details
         </MenuItem>
-        <MenuItem onClick={() => menuRecruiter && handleToggleBlock(menuRecruiter)}>
-          🚫 {menuRecruiter?.status === "active" ? "Block" : "Unblock"}
+        <MenuItem onClick={() => menuRecruiter && handleDelete(menuRecruiter)} sx={{ color: 'error.main' }}>
+          🗑️ Delete Recruiter
         </MenuItem>
       </Menu>
 

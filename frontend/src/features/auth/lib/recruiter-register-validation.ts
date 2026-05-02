@@ -1,3 +1,4 @@
+import { matchIsValidTel } from "mui-tel-input";
 import type {
   RecruiterRegisterFormErrors,
   RecruiterRegisterFormValues,
@@ -29,6 +30,12 @@ export function validateRecruiterRegisterForm(
 
   if (!values.mobile_number.trim()) {
     errors.mobile_number = "Mobile number is required.";
+  } else if (!matchIsValidTel(values.mobile_number)) {
+    errors.mobile_number = "Please enter a valid phone number for the selected region.";
+  }
+
+  if (values.alternative_mobile.trim() && !matchIsValidTel(values.alternative_mobile)) {
+    errors.alternative_mobile = "Please enter a valid phone number for the selected region.";
   }
 
   if (!values.otp_verified) {

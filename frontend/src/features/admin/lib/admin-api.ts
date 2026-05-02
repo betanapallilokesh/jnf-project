@@ -264,3 +264,15 @@ export async function closeJnf(jnfId: string, notes: string) {
     body: { notes },
   });
 }
+
+export async function deleteAdminCompany(companyId: string) {
+  return fetchJson<{ message: string }>(`/admin/companies/${companyId}`, {
+    method: "DELETE",
+  });
+}
+
+export async function deleteAdminRecruiter(recruiterId: string) {
+  return fetchJson<{ message: string }>(`/admin/recruiters/${recruiterId}`, {
+    method: "DELETE",
+  });
+}

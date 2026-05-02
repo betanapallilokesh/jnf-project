@@ -33,4 +33,11 @@ class AdminGeneralController extends Controller
             $this->adminGeneralService->listNotifications()
         );
     }
+
+    public function destroyCompany(int $company): JsonResponse
+    {
+        return $this->api()->success(
+            $this->adminGeneralService->deleteCompany($company)
+        );
+    }
 }
