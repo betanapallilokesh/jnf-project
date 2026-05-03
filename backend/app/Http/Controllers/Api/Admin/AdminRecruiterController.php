@@ -32,4 +32,11 @@ class AdminRecruiterController extends Controller
             )
         );
     }
+
+    public function destroy(int $recruiter): JsonResponse
+    {
+        return $this->api()->success(
+            $this->adminRecruiterService->destroy($recruiter)
+        );
+    }
 }

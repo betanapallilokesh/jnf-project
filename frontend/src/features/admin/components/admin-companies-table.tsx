@@ -13,7 +13,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
-import { listAdminCompanies, type AdminCompanyOverview } from "../lib/admin-api";
+import { listAdminCompanies, deleteAdminCompany, type AdminCompanyOverview } from "../lib/admin-api";
 import LoadingState from "@/components/ui/loading-state";
 
 export default function AdminCompaniesTable() {
@@ -49,10 +49,21 @@ export default function AdminCompaniesTable() {
     setMenuCompany(null);
   };
 
-  const handleToggleBlock = (company: AdminCompanyOverview) => {
-    // TODO: Implement block/unblock API
-    console.log("Toggle block for company:", company.id);
-    handleMenuClose();
+  const handleDelete = async (company: AdminCompanyOverview) => {
+    if (!confirm(`Are you sure you want to completely delete ${company.name}? This action cannot be undone and will delete all associated recruiters and JNFs.`)) {
+      handleMenuClose();
+      return;
+    }
+    
+    try {
+      await deleteAdminCompany(company.id);
+      setCompanies((current) => current.filter((c) => c.id !== company.id));
+    } catch (error) {
+      console.error("Failed to delete company:", error);
+      alert("Failed to delete company. Please try again.");
+    } finally {
+      handleMenuClose();
+    }
   };
 
   if (isLoading) {
@@ -124,8 +135,8 @@ export default function AdminCompaniesTable() {
       </TableContainer>
 
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleMenuClose}>
-        <MenuItem onClick={() => menuCompany && handleToggleBlock(menuCompany)}>
-          🚫 Block / Unblock Company
+        <MenuItem onClick={() => menuCompany && handleDelete(menuCompany)} sx={{ color: 'error.main' }}>
+          🗑️ Delete Company
         </MenuItem>
       </Menu>
 

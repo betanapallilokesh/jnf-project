@@ -247,6 +247,30 @@ export function getJnfFieldErrors(record: JnfRecord): JnfFieldErrors {
       "Policy consent is required.";
   }
 
+  if (!record.declaration.aipc_guidelines_accepted) {
+    errors["declaration.aipc_guidelines_accepted"] = "Accepting AIPC guidelines is required.";
+  }
+
+  if (!record.declaration.shortlisting_timeline_accepted) {
+    errors["declaration.shortlisting_timeline_accepted"] = "Shortlisting timeline acceptance is required.";
+  }
+
+  if (!record.declaration.posted_information_verified) {
+    errors["declaration.posted_information_verified"] = "Verification of posted info is required.";
+  }
+
+  if (!record.declaration.ranking_media_consent) {
+    errors["declaration.ranking_media_consent"] = "Media consent is required.";
+  }
+
+  if (!record.declaration.accuracy_terms_accepted) {
+    errors["declaration.accuracy_terms_accepted"] = "Accuracy terms must be accepted.";
+  }
+
+  if (!record.declaration.rti_nirf_consent) {
+    errors["declaration.rti_nirf_consent"] = "CDC sharing consent is required.";
+  }
+
   return errors;
 }
 
@@ -340,6 +364,13 @@ export function getJnfMissingRequiredFields(record: JnfRecord) {
   if (!record.declaration.policy_consent_confirmed) {
     missing.push("Policy Consent");
   }
+
+  if (!record.declaration.aipc_guidelines_accepted) missing.push("AIPC Guidelines Consent");
+  if (!record.declaration.shortlisting_timeline_accepted) missing.push("Shortlisting Timeline Consent");
+  if (!record.declaration.posted_information_verified) missing.push("Information Verification Consent");
+  if (!record.declaration.ranking_media_consent) missing.push("Ranking & Media Consent");
+  if (!record.declaration.accuracy_terms_accepted) missing.push("Accuracy & T&C Consent");
+  if (!record.declaration.rti_nirf_consent) missing.push("CDC Sharing Consent");
 
   return missing;
 }

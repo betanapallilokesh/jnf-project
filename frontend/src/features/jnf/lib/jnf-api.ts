@@ -260,3 +260,7 @@ export async function importJdWithAi(file: File) {
   if (!response.data) throw new Error("Failed to parse JD PDF via AI");
   return response.data;
 }
+
+export async function getSkillsCatalog() {
+  return fetchJson<{ skills: Array<{ id: number; label: string }> }>("/jnfs/skills", { method: "GET" });
+}

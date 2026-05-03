@@ -55,7 +55,7 @@ export type JnfEligibility = {
   other_specific_requirements: string;
   gap_year_allowed: boolean;
   history_of_arrears_allowed: boolean;
-  
+
   // UI ONLY FIELDS
   eligible_batch: string;
   eligible_programme: JnfEligibilityProgramme;
@@ -223,7 +223,7 @@ export function createEmptyJnfEligibility(): JnfEligibility {
     other_specific_requirements: "",
     gap_year_allowed: false,
     history_of_arrears_allowed: false,
-    
+
     eligible_batch: "",
     eligible_programme: "",
     eligible_degree_ids: [],

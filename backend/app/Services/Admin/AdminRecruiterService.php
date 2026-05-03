@@ -32,4 +32,14 @@ class AdminRecruiterService
             'recruiter' => $recruiter->fresh()->toArray(),
         ];
     }
+
+    public function destroy(int $recruiterId): array
+    {
+        $recruiter = Recruiter::findOrFail($recruiterId);
+        $recruiter->delete();
+
+        return [
+            'message' => 'Recruiter and all associated records deleted successfully.',
+        ];
+    }
 }

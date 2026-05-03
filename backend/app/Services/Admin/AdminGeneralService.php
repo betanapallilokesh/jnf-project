@@ -72,4 +72,14 @@ class AdminGeneralService
             })->toArray()
         ];
     }
+
+    public function deleteCompany(int $companyId): array
+    {
+        $company = Company::findOrFail($companyId);
+        $company->delete();
+
+        return [
+            'message' => 'Company and all associated records deleted successfully.',
+        ];
+    }
 }

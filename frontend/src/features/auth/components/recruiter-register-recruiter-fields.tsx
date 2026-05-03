@@ -1,7 +1,9 @@
+import { useState } from "react";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import Typography from "@mui/material/Typography";
+import { MuiTelInput, matchIsValidTel } from "mui-tel-input";
 import type {
   RecruiterRegisterFormErrors,
   RecruiterRegisterFormValues,
@@ -22,6 +24,23 @@ export default function RecruiterRegisterRecruiterFields({
   errors,
   onFieldChange,
 }: RecruiterRegisterRecruiterFieldsProps) {
+  const [touchedMobile, setTouchedMobile] = useState(false);
+  const [touchedAltMobile, setTouchedAltMobile] = useState(false);
+
+  const mobileError =
+    errors.mobile_number ||
+    (touchedMobile && !matchIsValidTel(form.mobile_number)
+      ? "Please enter a valid phone number for the selected region."
+      : "");
+
+  const altMobileError =
+    errors.alternative_mobile ||
+    (touchedAltMobile &&
+    form.alternative_mobile &&
+    !matchIsValidTel(form.alternative_mobile)
+      ? "Please enter a valid phone number for the selected region."
+      : "");
+
   return (
     <Stack spacing={2}>
       <Typography variant="h6">Recruiter Details</Typography>
@@ -58,27 +77,27 @@ export default function RecruiterRegisterRecruiterFields({
           fullWidth
         />
 
-        <TextField
+        <MuiTelInput
           label="Mobile Number"
           required
           value={form.mobile_number}
-          onChange={(event) =>
-            onFieldChange("mobile_number", event.target.value)
-          }
-          error={Boolean(errors.mobile_number)}
-          helperText={errors.mobile_number}
+          onChange={(value) => onFieldChange("mobile_number", value)}
+          onBlur={() => setTouchedMobile(true)}
+          error={Boolean(mobileError)}
+          helperText={mobileError}
           fullWidth
+          defaultCountry="IN"
         />
 
-        <TextField
+        <MuiTelInput
           label="Alternative Mobile Number"
           value={form.alternative_mobile}
-          onChange={(event) =>
-            onFieldChange("alternative_mobile", event.target.value)
-          }
-          error={Boolean(errors.alternative_mobile)}
-          helperText={errors.alternative_mobile}
+          onChange={(value) => onFieldChange("alternative_mobile", value)}
+          onBlur={() => setTouchedAltMobile(true)}
+          error={Boolean(altMobileError)}
+          helperText={altMobileError}
           fullWidth
+          defaultCountry="IN"
         />
 
         <Box />

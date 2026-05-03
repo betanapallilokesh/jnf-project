@@ -8,6 +8,12 @@ import { routes } from "@/lib/routes";
 
 const actionItems = [
   {
+    title: "Create New INF",
+    description: "Start a fresh Internship Notification Form for a new cycle.",
+    href: routes.recruiter.newJnf,
+    buttonLabel: "+ New INF",
+  },
+  {
     title: "Create New JNF",
     description: "Start a fresh Job Notification Form for a new hiring cycle.",
     href: routes.recruiter.newJnf,

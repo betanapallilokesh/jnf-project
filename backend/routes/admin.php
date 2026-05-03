@@ -39,9 +39,11 @@ Route::prefix('admin')->group(function () {
         // Recruiter management
         Route::get('/recruiters', [AdminRecruiterController::class, 'index']);
         Route::patch('/recruiters/{recruiter}/status', [AdminRecruiterController::class, 'updateStatus']);
+        Route::delete('/recruiters/{recruiter}', [AdminRecruiterController::class, 'destroy']);
 
         // General admin data
         Route::get('/companies', [AdminGeneralController::class, 'companies']);
+        Route::delete('/companies/{company}', [AdminGeneralController::class, 'destroyCompany']);
         Route::get('/activities', [AdminGeneralController::class, 'activities']);
         Route::get('/notifications', [AdminGeneralController::class, 'notifications']);
     });
