@@ -1,61 +1,89 @@
-# Frontend
+<div align="center">
+  <h1>JNF Portal - Frontend</h1>
+  <p>
+    A scalable, modern frontend application for the Job Notification Facility (JNF) Portal.
+  </p>
 
-This folder contains the Next.js frontend for the JNF Portal.
+  <!-- Badges -->
+  <p>
+    <img src="https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=next.js" alt="Next.js" />
+    <img src="https://img.shields.io/badge/React-19-blue?style=for-the-badge&logo=react" alt="React" />
+    <img src="https://img.shields.io/badge/TypeScript-5-blue?style=for-the-badge&logo=typescript" alt="TypeScript" />
+    <img src="https://img.shields.io/badge/MUI-7-007FFF?style=for-the-badge&logo=mui" alt="MUI" />
+  </p>
+</div>
 
-## Stack
+## 📖 About the Project
 
-- Next.js
-- React
-- TypeScript
-- MUI
-- NextAuth.js
+The JNF Portal Frontend is a highly performant, server-side rendered application built to serve candidates, recruiters, and administrators. It interfaces with a RESTful Laravel backend to deliver a seamless job notification and management experience.
 
-## Source Structure
+Built with a focus on **scalability**, **maintainability**, and **developer experience**, the architecture leverages Next.js App Router and a feature-driven directory structure.
 
-- `src/app` = route entry files, layouts, and route groups. Keep these files thin and focused on routing.
-- `src/components` = shared reusable UI and layout primitives used across multiple features
-- `src/features` = business modules. Each feature can contain its own components, data, hooks, helpers, and page-level composition
-- `src/providers` = app-wide providers
-- `src/theme` = MUI theme setup
-- `src/lib` = cross-feature utilities and helpers
-- `src/types` = shared TypeScript types used in multiple features
+## 🚀 Tech Stack
 
-### Recommended Feature Pattern
+- **Core**: Next.js 15 (App Router), React 19
+- **Language**: TypeScript
+- **Styling & UI**: Material-UI (MUI v7), Emotion
+- **Authentication**: NextAuth.js
+- **Tooling**: ESLint
 
-Use `src/features/<feature-name>` as the main home for user-facing functionality.
+## 🏗️ Architecture
 
-Example:
-
-```text
-src/features/portal/
-  components/
-  data/
-  portal-home-page.tsx
-```
-
-This keeps route files simple:
+We utilize a **Feature-Driven Architecture** to ensure the codebase remains maintainable as business complexity grows. Code is co-located by business domain rather than technical function.
 
 ```text
-src/app/(public)/page.tsx -> imports and renders portal home page
-src/app/(public)/login/page.tsx -> imports and renders recruiter login page
+src/
+├── app/          # Next.js App Router (Layouts & Route definitions only)
+├── features/     # Business logic modules (UI, data fetching, hooks per feature)
+├── components/   # Shared, generic UI components (Buttons, Inputs, Modals)
+├── lib/          # Cross-feature utilities and helper functions
+├── providers/    # Global Context and state providers
+├── theme/        # MUI global theme configurations
+└── types/        # Global TypeScript definitions
 ```
 
-## Route Surfaces
+### Route Surfaces
+- `(public)`: Public-facing landing pages, authentication, and registration flows.
+- `(recruiter)`: Dedicated dashboards and management tools for recruiters.
+- `(admin)`: Administrative control panel and system settings.
 
-- `(public)` = landing, login, registration
-- `(recruiter)` = recruiter portal pages
-- `(admin)` = admin portal pages
+## ⚙️ Getting Started
 
-Route group names organize code but do not appear in the URL.
+### Prerequisites
+- Node.js (v20+ recommended)
+- npm or yarn
 
-## Environment
+### Installation
 
-Copy `.env.example` to `.env.local` and update values for your local machine.
+1. **Clone the repository:**
+   ```bash
+   git clone <repository-url>
+   cd jnf-project/frontend
+   ```
 
-## Team Rule
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-- Do not place business-specific code directly inside shared folders unless it is truly reusable
-- Feature logic should go into the appropriate folder under `src/features`
-- Prefer small route files in `src/app` that only wire layouts and feature entry components
-- Keep page-specific sections inside their feature folder instead of growing one large `page.tsx`
-- Move helpers or types to `src/lib` or `src/types` only when they are shared by multiple features
+3. **Environment Setup:**
+   Copy the example environment file and configure your local variables.
+   ```bash
+   cp .env.example .env.local
+   ```
+   *Note: Ensure your environment variables point to your local Laravel backend instance.*
+
+4. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+   The application will be available at [http://localhost:3000](http://localhost:3000).
+
+## 🛡️ Best Practices & Guidelines
+
+To maintain code quality across the team, please adhere to the following rules:
+
+1. **Feature Encapsulation**: Do not place business-specific code in shared folders. If a component or hook belongs to a specific domain, it lives in `src/features/<domain>`.
+2. **Thin Routes**: Route files in `src/app` should act only as wrappers that import and render entry components from `src/features`. Do not build massive UI trees directly in `page.tsx`.
+3. **Type Safety**: Strictly define interfaces for API responses and component props. Avoid the use of `any`.
+4. **Code Quality**: Ensure `npm run lint` passes before pushing changes.

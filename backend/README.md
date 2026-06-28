@@ -1,4 +1,15 @@
-# JNF Portal — Backend Technical Documentation
+<div align="center">
+  <h1>JNF Portal — Backend Technical Documentation</h1>
+  <p>
+    <strong>Digitising the campus placement recruitment workflow with AI-assisted parsing.</strong>
+  </p>
+  <p>
+    <img src="https://img.shields.io/badge/Laravel-11.x-FF2D20?style=for-the-badge&logo=laravel&logoColor=white" alt="Laravel" />
+    <img src="https://img.shields.io/badge/PHP-8.2-777BB4?style=for-the-badge&logo=php&logoColor=white" alt="PHP" />
+    <img src="https://img.shields.io/badge/MySQL-8.x-4479A1?style=for-the-badge&logo=mysql&logoColor=white" alt="MySQL" />
+    <img src="https://img.shields.io/badge/Google_Gemini-AI-4285F4?style=for-the-badge&logo=google&logoColor=white" alt="Gemini AI" />
+  </p>
+</div>
 
 > **Project:** Job Notification Form (JNF) Portal for IIT (ISM) Dhanbad  
 > **Purpose:** Digitises the campus placement recruitment workflow — from recruiter registration and company onboarding through JNF creation, AI-assisted form filling, admin review, and approval.
